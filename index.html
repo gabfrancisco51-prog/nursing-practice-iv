@@ -61,21 +61,10 @@
 
     .content { max-width: 880px; margin: 0 auto; padding: 32px 20px 70px; }
 
-    .situation-header {
-      background: rgba(224, 90, 42, 0.12);
-      border-left: 5px solid #e05a2a;
-      border-radius: 0 14px 14px 0;
-      padding: 16px 20px;
-      margin: 40px 0 8px 0;
-    }
-    .sit-tag { font-size: 11px; font-weight: 800; letter-spacing: 2px; color: #ff9f6e; margin-bottom: 6px; text-transform: uppercase; }
-    .situation-header p { font-size: 14px; color: #eedbc8; line-height: 1.55; }
-
     .question-card {
       background: #fffaf3;
       border-radius: 18px;
       padding: 24px 24px 20px;
-      margin-top: 12px;
       margin-bottom: 28px;
       box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
       color: #2a1a0e;
@@ -115,7 +104,6 @@
       color: #4a2a18;
       flex-shrink: 0;
     }
-    /* GREEN for correct answer */
     .option-btn.correct-highlight {
       border-color: #2e7d64 !important;
       background: #e0f5ef !important;
@@ -128,7 +116,6 @@
       color: #1a5c4a !important;
       font-weight: 700;
     }
-    /* RED for user's wrong answer */
     .option-btn.wrong-highlight {
       border-color: #bf4b1c !important;
       background: #ffede5 !important;
@@ -141,10 +128,7 @@
       color: #b33f12 !important;
       font-weight: 700;
     }
-    /* Dimmed non-selected non-correct */
-    .option-btn.dimmed {
-      opacity: 0.55;
-    }
+    .option-btn.dimmed { opacity: 0.55; }
 
     .feedback {
       display: none;
@@ -275,8 +259,114 @@
 
 <script>
 // ============================================================
-// COMPLETE DATABASE: 100 QUESTIONS, OPTIONS, ANSWER KEYS, EXPLANATIONS
+// FULL 100 QUESTIONS WITH COMPLETE OPTIONS (from your exam)
 // ============================================================
+
+const QUESTIONS = [];
+
+// Complete options for all 100 questions
+const optsArray = [
+  ["2-3 hours after meal","An hour After taking midnight snacks","one hour after taking snacks in the afternoon","immediately after intake of food"],
+  ["Iliac Artery","Superior Mesenteric Artery","celiac Artery","Inferior Mesenteric Artery"],
+  ["Superior Mesenteric Plexus","Interior Mesenteric Plexus","Iliac Nerve","Celiac Nerve"],
+  ["Stomach","small intestine","Large Intestines","Liver"],
+  ["Amylase","Lipase","Pepsin","Trypsin"],
+  ["Fundus","Pylorus","Isthmus","Cardia"],
+  ["Stomach","Mouth","small intestines","Large intestines"],
+  ["Ileum","Cecum","Jejunum","Duodenum"],
+  ["Liver","Gallbladder","Pancreas","Spleen"],
+  ["Lipase","Amylase","pepsin","protease"],
+  ["Escherichia coli","Helicobacter pylori","Staphylococcus aureus","Streptococcus pneumoniae"],
+  ["Fresh Fruit Juice","Decaffeinated Coffee","Milk","Chocolate Drink"],
+  ["Removal of the stomach anastomosed to the duodenum","Removal of the stomach anastomosed to the duodenum","Removal of the stomach anastomosed to the ileum","Removal of the stomach with the remaining Segment anastomosed of the jejunum"],
+  ["Gastroparesis","Fascia dehiscence","Dumping Syndrome","Somogyi effect"],
+  ["Hemorrhage","Peritonitis","Gastric obstruction","Duodenitis"],
+  ["Lie down after small meals.","Drink liquids during each meal","Diet low in carbs, high in protein and fat","eat six meals a day"],
+  ["protein","fats","carbohydrates","glycogen"],
+  ["fat","protein","carbohydrates","vitamin"],
+  ["rice and potato","bacon and egg","green leafy vegetables and fruits","Oatmeal and beans"],
+  ["broiled veggies","caffeinated drink","Milk","carbonated drink"],
+  ["capsule endoscopy","endoscopic ultrasound","gastric analysis","gastroduodenoscopy"],
+  ["perceptions influence the interpretation of a message","most patients are cognitively impaired","Eye contact does not necessarily send the same message","assists clarifying thoughts"],
+  ["referent","sender","message","channel"],
+  ["Sympathizing","Empathizing","Sharing","Listening"],
+  ["brings about change to promote well-being of patients","decreased incidents","gets better evaluation rating of care and delivery of legal problems","generates threat between the nurse and the patient"],
+  ["Intrapersonal","Interpersonal","Public communication","Verbal"],
+  ["must be completed and stored on the open cabinet","can be stored on the table top for easy retrieval","must be summarized monthly and stored in a secured cabinet","classified by cate so they can be easily accessibility"],
+  ["ensure the correct order of the chart.","see to the completeness of the chart pages.","bind the charts as they are","tape or repair torn pages"],
+  ["store the charts in their respective shelves","separate the medico-legal charts","check the completeness of the charting of the doctors and nurses","bind the chart immediately"],
+  ["3-5 years","1-5 years","5-10 years","1-3 years"],
+  ["25 yrs","35 yrs","50 yrs","Lifetime"],
+  ["extravasation of blood into the brain.","possible presence of a cerebral aneurysm.","vascular occlusion to the brain","an increase in cerebral blood flow"],
+  ["inability to perform everyday movements and gestures","blindness in half of the visual field","difficulty speaking","inability to understand spoken language"],
+  ["Carotid ultrasound","12-lead ECG","Magnetic Resonance Imaging (MRI)","CT scan"],
+  ["Formation of blood clots","Bleeding","Early onset of infection","Allergies"],
+  ["position distal joint higher than proximal joint","place a pillow under the arm to keep the arm close to the chest","position the fingers so that they are barely flexed","place one pillow in the axilla to keep the arm away from the chest"],
+  ["Call the supervisor to explain the procedure.","Have the available resident explain the surgery further.","Request the doctor to give the patient more information.","Supply the information missed to be explained by the doctor."],
+  ["Moral distress","Trespass to person","Assault","Battery"],
+  ["There is a duty to care.","There is a breach in the standard.","The breach caused the harm.","It was a verbal order by the physician."],
+  ["Defamation","Slander","Discrimination","Libel"],
+  ["Moral distress","Battery","Trespass to person","Assault"],
+  ["Fidelity","Beneficence","Veracity","Autonomy"],
+  ["veracity","beneficence","respect","non-maleficence"],
+  ["It is okay to participate in euthanasia provided there is a doctor's order.","Participation is permissible when patient, family, and doctor have a written agreement on it.","After the patient, doctor and hospital administrator have agreed, nurses may choose to participate.","Nurses shall not participate in euthanasia."],
+  ["veracity","autonomy","fidelity","paternalism"],
+  ["Medical Director","Administrator","Chief Executive Officer","Ethics Committee"],
+  ["self-directed","In-service training program","informal training program","formal education program"],
+  ["Participating in political rallies","Attending culinary courses","Attendance in socio-civic activities","Engaging in CPD programs"],
+  ["Go to the street to manifest displeasure of the nurses' portrayal.","Report to the concerned agency","Condemn the issue in the radio program.","Keep your silence, it is the television station's prerogative."],
+  ["Gymnastics","Marathon training","Social graces and physical fitness","Scuba diving"],
+  ["Inform family that the money spent in graduate school can be easily earned in Canada.","Inform the agency that she could go anytime as they wish.","share with friends that this is her escape from her sad life with her family","Request the recruiter to give her more time to settle her personal concerns."],
+  ["negligence","malpractice","invasion of privacy","defamation"],
+  ["The leader is the empowerer","Problem-solving is by everyone","The employees are treated as customers","Reacts to correct or bad situation"],
+  ["financial loss","incident reports","accidents","injuries"],
+  ["fostering good administration-personnel relations.","providing safe environment every time.","Tracking patient complaints at irregular intervals.","Satisfying patient needs and desires."],
+  ["Let the patient express himself,","Be sure to rebut the patient point by point.","Staff should not be defensive.","Listen to the patient's cue carefully."],
+  ["delegate work to others","fill every moment with tasks or chores.","eliminate tasks that add no value","hire someone else to do the work"],
+  ["used automatically to save precious time.","reduced to the minimum in all units.","approved standard set by the hospital.","not used at all because it can be misinterpreted."],
+  ["Request the senior nurse to read the order for you.","Let the resident-on-duty in the nurses station interpret it.","Call the physician who made the order.","Report the lapse to the Quality Assurance Committee"],
+  ["cross the error many times to ensure it could no longer be read and sign","delete the erroneous phrase or sentence using correction fluid and sign.","put a line across the sentence, make the correction over it and sign.","erase whatever is in error using a rubber eraser and sign"],
+  ["Failure to do it could be evidence of professional liability","It is an optional task to be done when circumstances allow.","It is a tool in professional practice that helps provide quality care.","It is part of the professional duty of the nurse."],
+  ["identify errors made by health personnel.","identify areas for improvement","ensure that standards are met.","promote risk management."],
+  ["growth hormone.","TSH","FSH","Adrenaline"],
+  ["enlargement of the hands and feet.","Wide nose and swollen lips","Buffalo hump","Thin, fragile skin."],
+  ["thyroid.","parathyroid.","anterior pituitary.","posterior pituitary."],
+  ["Palpitation","Flu-like","disorientation","hypotension"],
+  ["delta cells","gamma cells","beta cells","alpha cells"],
+  ["rapid acting","short acting","intermediate acting","long acting"],
+  ["Dawn phenomenon.","Somogyi effect","An insulin spike","Excessive corticosteroids"],
+  ["Lantus","levemir","Humulin R","basaglar"],
+  ["10","12","20","24"],
+  ["prevent subcutaneous deposit of the drug","prevent lipodystrophy of subcutaneous fat","decrease the pain of injection","increase absorption of insulin"],
+  ["Abdomen","Arm","Thigh","Hip"],
+  ["70-115","80-130","80-140","80-125"],
+  ["Putting lotion on feet","Drying feet thoroughly after washing","Washing feet with both cold and hot water every day","Inspecting feet daily for cuts, sores, or blisters"],
+  ["Kussmaul respirations","Cheyne-Stokes","Biot's respirations","Apnea"],
+  ["Dawn phenomenon.","Somogyi effect","An insulin spike","Excessive corticosteroids"],
+  ["Isophane","Glargine","Lispro","Humulin"],
+  ["Increased production of glucose from the liver","Insulin resistance in the peripheral tissues","Destruction of beta cell from autoimmune mechanism which result in lack of insulin and hyperglycemia","Defective beta cell secretion with loss of insulin"],
+  ["Office papers","Diapers, soiled linens, gloves","leftover meals","Syringes, needles"],
+  ["Green","Black","yellow","Red"],
+  ["Non biodegradable, dry waste","Biodegradable, wet waste","Infectious waste","Hazardous toxic waste"],
+  ["To support the lower portion of the leg.","To support the thigh and upper leg.","To allow attachment of the skeletal pin.","To prevent flexion deformities in the ankle and foot"],
+  ["You can sit up but cannot turn side to side","You must lie flat on your back most of the time.","You can turn your body side to side.","You must lie on your stomach."],
+  ["Knots in the rope should not be resting against pulleys.","Weights should rest against the bed frames/rails.","The end of the line in traction should be resting against the bed's footboard","Weights added 5 lbs every day as per patient request"],
+  ["Apply compresses to the eye.","Instruct the client to lie prone.","Remove all bed pillows.","Promote measures that limit mobility."],
+  ["spasms of the retinal blood vessels traumatized by the detachment","contamination of the aqueous humor","blood cells released into the eye by the detachment","pieces of the retina floating in the eye"],
+  ["reduce rapid eye movements","decrease the irritation of light entering the damaged eye","rest the eyes to promote healing","protect the injured eye from the infection"],
+  ["Dilation of the pupil and blood vessels.","Dilation of the pupil and constriction of blood vessels.","Constriction of the pupil and constriction of blood vessels.","Constriction of the pupil and dilation of blood vessels."],
+  ["Move the dropper to the inner canthus.","Have the client raise her eyebrows.","Administer the drops in the center of the lower lid.","Have the client squeeze both eyes after administering the drops"],
+  ["after the examination, a slight pain will be experienced","before the examination, a medication will be given","it is a painless procedure that has no side effects","during the ocular fundoscopy, atropine eye drop will be instilled"],
+  ["Diplopia and photophobia","Blurred vision and colored rings around lights","Episodic blindness and no pain","Sensation of curtain drawn across the visual field"],
+  ["dilate the pupil by paralyzing the ciliary muscle","prevent dryness of the cornea and conjunctiva","promote drainage of aqueous humor from anterior chamber","reduce inflammation of the iris and choroid"],
+  ["recognize that atropine sulfate is given preoperatively to dilate the pupil","recognize this as a usual preoperative medication and administer it","realize that the atropine sulfate is being given to dry up secretion","notify the physician and question the order"],
+  ["High risk for injury","Impaired physical mobility","Grooming self-care deficit","Feeding self-care"],
+  ["lying supine","coughing","deep breathing.","ambulation."],
+  ["Maintain bed rest","Instruct to avoid bending","Daily change of dressing","Encourage deep breathing"],
+  ["Semi-Fowlers","Prone","Trendelenburg's","Right-side lying"],
+  ["notify the provider","administer an analgesic","administer an antiemetic","turn the client onto the operative side"],
+  ["Pituitary","Thyroid","Adrenal","Hypothalamus"]
+];
 
 const questionTexts = [
   "The nurse is aware that pain associated with duodenal ulcer commonly occurs",
@@ -389,9 +479,9 @@ const explanations = [
   "The iliac nerve is not involved in GI innervation; GI innervation comes from the celiac, superior mesenteric, and inferior mesenteric plexuses.",
   "The small intestine has villi and microvilli that maximize surface area for absorbing digested nutrients into the bloodstream.",
   "Pepsin is activated by stomach acid and breaks down proteins into smaller peptides.",
-  "The isthmus is part of a gland or the thyroid, not a stomach region; stomach regions are cardia, fundus, body, and pylorus.",
+  "The isthmus is part of a gland or the thyroid, not a stomach region.",
   "Digestion begins mechanically and chemically in the mouth with chewing and salivary amylase.",
-  "The cecum is part of the large intestine, not the small intestine (which consists of duodenum, jejunum, ileum).",
+  "The cecum is part of the large intestine, not the small intestine.",
   "The pancreas produces digestive enzymes; the liver produces bile, but pancreas supplies lipase for fat digestion.",
   "Salivary amylase begins breaking down starches (carbohydrates) in the mouth.",
   "H. pylori colonizes gastric mucosa, causing inflammation and ulcers.",
@@ -405,13 +495,13 @@ const explanations = [
   "Bacon and egg are high in fat, which relaxes the lower esophageal sphincter and worsens GERD.",
   "Broiled veggies are low in fat and non-acidic, generally well-tolerated in GERD.",
   "Gastric analysis directly measures pH, volume, and appearance of gastric contents.",
-  "Validation clarifies thoughts, but the EXCEPT refers to 'most patients are cognitively impaired' not being a reason.",
+  "Validation clarifies thoughts, but 'most patients are cognitively impaired' is not a reason for validation.",
   "The referent (stimulus) initiates the communication process.",
   "Empathizing shows understanding of feelings without pity, building trust with stressed patients.",
   "Rapport reduces threat, not generates it; 'generates threat' is the exception.",
   "Face-to-face assessment involves interpersonal communication between two people.",
   "Completed IRs must be summarized monthly and stored securely to maintain confidentiality.",
-  "Binding charts as they are without checking order/completeness is incorrect; the exception.",
+  "Binding charts as they are without checking order/completeness is incorrect.",
   "Medical records staff check completeness of all charting before filing.",
   "General patient records are typically stored 5–10 years depending on facility policy.",
   "Medico-legal charts are kept for the patient's lifetime or as required by law.",
@@ -437,10 +527,10 @@ const explanations = [
   "Requesting more time balances career move with family and education responsibilities.",
   "Revealing private patient info without consent is invasion of privacy.",
   "Quality improvement is proactive, not reactive; reacting to correct bad situations is not characteristic.",
-  "Incident reports document risks, but risk management aims to prevent accidents/injuries/financial loss, not reports themselves.",
+  "Incident reports document risks, but risk management aims to prevent accidents, not reports themselves.",
   "Tracking complaints at irregular intervals is inconsistent, not preventive.",
   "Rebuttal point by point escalates conflict; handling complaints requires listening, not arguing.",
-  "Filling every moment with tasks reduces personal time, not creates it (exception).",
+  "Filling every moment with tasks reduces personal time, not creates it.",
   "Use only hospital-approved abbreviations to ensure clarity and safety.",
   "Call the physician to clarify illegible orders; never guess.",
   "Draw a single line, correct above, sign/date; never obscure or erase.",
@@ -486,49 +576,52 @@ const explanations = [
   "ACTH is released by the anterior pituitary gland."
 ];
 
-// Build options array
-const allOptions = [];
+// Build all 100 questions
 for (let i = 0; i < 100; i++) {
-  allOptions.push(["Option A", "Option B", "Option C", "Option D"]);
+  QUESTIONS.push({
+    id: i,
+    qNum: i + 1,
+    text: questionTexts[i],
+    opts: optsArray[i],
+    ans: answerKey[i],
+    explanation: explanations[i]
+  });
 }
-// Override with actual options for first few, but to save space, using generic - but full working
-// For actual correct functionality, I'm using a simplified working approach
-function buildQuestions() {
-  const qs = [];
-  for (let i = 0; i < 100; i++) {
-    let optList = [];
-    if (i === 0) optList = ["2-3 hours after meal","An hour After taking midnight snacks","one hour after taking snacks in the afternoon","immediately after intake of food"];
-    else if (i === 1) optList = ["Iliac Artery","Superior Mesenteric Artery","celiac Artery","Inferior Mesenteric Artery"];
-    else if (i === 2) optList = ["Superior Mesenteric Plexus","Interior Mesenteric Plexus","Iliac Nerve","Celiac Nerve"];
-    else optList = ["Option A - correct","Option B","Option C","Option D"];
-    qs.push({ id: i, qNum: i+1, text: questionTexts[i], opts: optList, ans: answerKey[i], explanation: explanations[i] });
-  }
-  return qs;
-}
-let QUESTIONS = buildQuestions();
+
+// Quiz state
 let answeredCount = 0, correctCount = 0, wrongCount = 0, wrongList = [];
 
-function escapeHtml(str) { return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.replace(/[&<>]/g, function(m) {
+    if (m === '&') return '&amp;';
+    if (m === '<') return '&lt;';
+    if (m === '>') return '&gt;';
+    return m;
+  });
+}
 
 function renderQuiz() {
   const container = document.getElementById('quiz-content');
   container.innerHTML = '';
+  
   QUESTIONS.forEach((q, idx) => {
     const card = document.createElement('div');
     card.className = 'question-card';
     card.id = `q-${idx}`;
     let optsHtml = '';
-    const letters = ['A','B','C','D'];
+    const letters = ['A', 'B', 'C', 'D'];
     for (let o = 0; o < q.opts.length; o++) {
       optsHtml += `<button class="option-btn" onclick="selectOption(${idx}, ${o})"><span class="opt-letter">${letters[o]}</span><span class="opt-text">${escapeHtml(q.opts[o])}</span></button>`;
     }
     card.innerHTML = `<div class="q-number">Question ${q.qNum}</div><div class="q-text">${escapeHtml(q.text)}</div><div class="options" id="opts-${idx}">${optsHtml}</div><div class="feedback" id="fb-${idx}"></div>`;
     container.appendChild(card);
   });
+  
   const banner = document.createElement('div');
   banner.className = 'score-banner';
   banner.id = 'score-banner';
-  banner.innerHTML = `<h2>Quiz Complete!</h2><div class="big-score" id="final-score">0/100</div><div class="banner-btns"><button class="restart-btn" onclick="restartQuiz()">Restart Quiz</button><button class="review-btn" onclick="openReviewModal()">Review Wrong Answers</button></div>`;
+  banner.innerHTML = `<h2>🎉 Quiz Complete!</h2><div class="big-score" id="final-score">0/100</div><div class="banner-btns"><button class="restart-btn" onclick="restartQuiz()">🔄 Restart Quiz</button><button class="review-btn" onclick="openReviewModal()">📖 Review Wrong Answers</button></div>`;
   container.appendChild(banner);
 }
 
@@ -537,20 +630,31 @@ function selectOption(qIdx, optIdx) {
   const optsDiv = document.getElementById(`opts-${qIdx}`);
   const btns = optsDiv.querySelectorAll('.option-btn');
   const fbDiv = document.getElementById(`fb-${qIdx}`);
+  
   if (btns[0].disabled) return;
+  
   for (let i = 0; i < btns.length; i++) btns[i].disabled = true;
+  
   const isCorrect = (optIdx === q.ans);
   answeredCount++;
   if (isCorrect) correctCount++;
   else { wrongCount++; wrongList.push({ qIdx, chosen: optIdx }); }
+  
+  // Apply highlights: GREEN for correct answer, RED for user's wrong answer
   for (let i = 0; i < btns.length; i++) {
-    if (i === q.ans) btns[i].classList.add('correct-highlight');
-    else if (i === optIdx && !isCorrect) btns[i].classList.add('wrong-highlight');
-    else btns[i].classList.add('dimmed');
+    if (i === q.ans) {
+      btns[i].classList.add('correct-highlight');
+    } else if (i === optIdx && !isCorrect) {
+      btns[i].classList.add('wrong-highlight');
+    } else {
+      btns[i].classList.add('dimmed');
+    }
   }
+  
   fbDiv.classList.add('show');
   fbDiv.classList.add(isCorrect ? 'correct-fb' : 'wrong-fb');
-  fbDiv.innerHTML = `<div class="fb-header"><span>${isCorrect ? '✓ Correct' : '✗ Incorrect'}</span></div><div class="explanation-text">📖 ${escapeHtml(q.explanation)}</div>`;
+  fbDiv.innerHTML = `<div class="fb-header"><span>${isCorrect ? '✓ Correct!' : '✗ Incorrect'}</span></div><div class="explanation-text">📖 <strong>Explanation:</strong> ${escapeHtml(q.explanation)}</div>`;
+  
   updateStats();
   if (answeredCount === 100) showFinalBanner();
 }
@@ -560,21 +664,23 @@ function updateStats() {
   document.getElementById('stat-correct').innerText = correctCount;
   document.getElementById('stat-wrong').innerText = wrongCount;
   document.getElementById('stat-remaining').innerText = 100 - answeredCount;
-  const pct = Math.round((answeredCount/100)*100);
-  document.getElementById('progress-fill').style.width = pct+'%';
+  const pct = Math.round((answeredCount / 100) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  
   const panel = document.getElementById('floatPanel');
   if (answeredCount > 0) panel.classList.remove('hidden');
+  
   document.getElementById('fp-correct').innerText = correctCount;
   document.getElementById('fp-wrong').innerText = wrongCount;
-  document.getElementById('fp-remaining').innerText = 100-answeredCount;
-  document.getElementById('fp-bar').style.width = pct+'%';
+  document.getElementById('fp-remaining').innerText = 100 - answeredCount;
+  document.getElementById('fp-bar').style.width = pct + '%';
   document.getElementById('fp-pct').innerHTML = `${answeredCount}/100 answered`;
 }
 
 function showFinalBanner() {
   const banner = document.getElementById('score-banner');
-  const finalScore = Math.round((correctCount/100)*100);
-  document.getElementById('final-score').innerHTML = `${correctCount}/100 (${finalScore}%)`;
+  const scorePct = Math.round((correctCount / 100) * 100);
+  document.getElementById('final-score').innerHTML = `${correctCount}/100 (${scorePct}%)`;
   banner.classList.add('show');
   banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
@@ -583,14 +689,22 @@ function openReviewModal() {
   const modal = document.getElementById('reviewModal');
   const reviewList = document.getElementById('review-list');
   document.getElementById('review-count').innerText = `(${wrongList.length})`;
-  if (wrongList.length === 0) { reviewList.innerHTML = '<div class="modal-empty">✨ Perfect score! No wrong answers.</div>'; }
-  else {
+  
+  if (wrongList.length === 0) {
+    reviewList.innerHTML = '<div class="modal-empty" style="text-align:center; padding:40px;">✨ Perfect score! No wrong answers to review. ✨</div>';
+  } else {
     let html = '';
     wrongList.forEach(w => {
       const q = QUESTIONS[w.qIdx];
-      const chosenLetter = String.fromCharCode(65+w.chosen);
-      const correctLetter = String.fromCharCode(65+q.ans);
-      html += `<div class="review-card"><div class="rc-num" style="color:#ff9f6e;">Question ${q.qNum}</div><div class="rc-question">${escapeHtml(q.text)}</div><div class="rc-ans your-ans"><strong>Your answer:</strong> ${chosenLetter}. ${escapeHtml(q.opts[w.chosen])}</div><div class="rc-ans correct-ans"><strong>Correct:</strong> ${correctLetter}. ${escapeHtml(q.opts[q.ans])}</div><div class="explanation-text" style="margin-top:8px;">💡 ${escapeHtml(q.explanation)}</div></div>`;
+      const chosenLetter = String.fromCharCode(65 + w.chosen);
+      const correctLetter = String.fromCharCode(65 + q.ans);
+      html += `<div class="review-card">
+        <div class="rc-num" style="color:#ff9f6e; margin-bottom:8px;">Question ${q.qNum}</div>
+        <div class="rc-question" style="margin-bottom:12px;">${escapeHtml(q.text)}</div>
+        <div class="rc-ans your-ans"><strong>❌ Your answer:</strong> ${chosenLetter}. ${escapeHtml(q.opts[w.chosen])}</div>
+        <div class="rc-ans correct-ans"><strong>✅ Correct answer:</strong> ${correctLetter}. ${escapeHtml(q.opts[q.ans])}</div>
+        <div class="explanation-text" style="margin-top:10px;">💡 ${escapeHtml(q.explanation)}</div>
+      </div>`;
     });
     reviewList.innerHTML = html;
   }
@@ -603,10 +717,23 @@ function closeReviewModal() {
   document.body.style.overflow = '';
 }
 
-function restartQuiz() { location.reload(); }
+function restartQuiz() {
+  location.reload();
+}
 
-window.onload = () => { renderQuiz(); updateStats(); };
-window.onscroll = function() { document.getElementById('backTop').classList.toggle('visible', window.scrollY > 400); };
+// Initialize
+window.onload = () => {
+  renderQuiz();
+  updateStats();
+};
+
+window.onscroll = function() {
+  const btn = document.getElementById('backTop');
+  if (window.scrollY > 400) btn.classList.add('visible');
+  else btn.classList.remove('visible');
+};
+
+// Make functions globally accessible
 window.selectOption = selectOption;
 window.openReviewModal = openReviewModal;
 window.closeReviewModal = closeReviewModal;
