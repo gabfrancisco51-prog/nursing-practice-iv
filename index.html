@@ -259,17 +259,224 @@
 
 <script>
 // ============================================================
-// COMPLETE QUIZ DATA - 100 QUESTIONS WITH CORRECT ANSWER KEY (A=0, B=1, C=2, D=3)
+// COMPLETE 100 QUESTIONS - FULL OPTIONS FOR EVERY QUESTION
 // ============================================================
 
-// Convert letter answer to index: A=0, B=1, C=2, D=3
-// Your answer key: 1.A,2.A,3.C,4.B,5.C,6.C,7.B,8.B,9.C,10.B,11.B,12.C,13.B,14.C,15.D,16.A,17.D,18.D,19.B,20.A,21.C,22.D,23.A,24.B,25.D,26.B,27.C,28.C,29.C,30.C,31.D,32.C,33.B,34.D,35.B,36.D,37.C,38.D,39.D,40.B,41.B,42.D,43.D,44.D,45.D,46.D,47.B,48.D,49.B,50.C,51.D,52.C,53.D,54.B,55.C,56.B,57.B,58.C,59.C,60.C,61.B,62.C,63.A,64.A,65.C,66.B,67.B,68.A,69.A,70.C,71.D,72.B,73.A,74.B,75.C,76.A,77.A,78.C,79.C,80.B,81.B,82.B,83.A,84.A,85.A,86.D,87.C,88.A,89.D,90.C,91.C,92.B,93.C,94.D,95.A,96.B,97.B,98.A,99.A,100.A
-
-const answerKeyIndices = [
-  0,0,2,1,2,2,1,1,2,1,1,2,1,2,3,0,3,3,1,0,2,3,0,1,3,1,2,2,2,2,3,2,1,3,1,3,2,3,3,1,1,3,3,3,3,3,1,3,1,2,3,2,3,1,2,1,1,2,2,2,1,2,0,0,2,1,1,0,0,2,3,1,0,1,2,0,0,2,2,1,1,1,0,0,0,3,2,0,3,2,2,1,3,3,0,1,1,0,0,0
+// Answer key indices (A=0, B=1, C=2, D=3)
+const answerKey = [
+  0,0,2,1,2,2,1,1,2,1,1,2,1,2,3,0,3,3,1,0,2,3,0,1,3,1,2,2,2,2,3,2,1,3,1,3,2,3,3,1,1,3,3,3,3,3,1,3,1,2,3,2,3,1,2,1,1,2,2,2,1,2,
+  0,0,2,1,1,0,0,2,3,1,0,1,2,0,0,2,2,1,1,1,0,0,0,3,2,0,3,2,2,1,3,3,0,1,1,0,0,0
 ];
 
-// Full options for all 100 questions
+// Explanations
+const explanations = [
+  "Duodenal ulcer pain typically occurs 2–3 hours after a meal when gastric acid empties onto the unprotected duodenal mucosa.",
+  "The iliac artery supplies the lower limbs, not the GI tract; the GI tract is supplied by the celiac, superior, and inferior mesenteric arteries.",
+  "The iliac nerve is not involved in GI innervation; GI innervation comes from the celiac, superior mesenteric, and inferior mesenteric plexuses.",
+  "The small intestine has villi and microvilli that maximize surface area for absorbing digested nutrients into the bloodstream.",
+  "Pepsin is activated by stomach acid and breaks down proteins into smaller peptides.",
+  "The isthmus is part of a gland or the thyroid, not a stomach region; stomach regions are cardia, fundus, body, and pylorus.",
+  "Digestion begins mechanically and chemically in the mouth with chewing and salivary amylase.",
+  "The cecum is part of the large intestine, not the small intestine (which consists of duodenum, jejunum, ileum).",
+  "The pancreas produces digestive enzymes; the liver produces bile, but pancreas produces lipase for fat digestion.",
+  "Salivary amylase begins breaking down starches (carbohydrates) in the mouth.",
+  "H. pylori colonizes gastric mucosa, causing inflammation and ulcers.",
+  "Milk stimulates gastric acid secretion, which can worsen duodenal ulcer pain.",
+  "Billroth I (gastroduodenostomy) anastomoses the remaining stomach to the duodenum.",
+  "Rapid gastric emptying after Billroth I causes dumping syndrome (sweating, palpitations, diarrhea).",
+  "Duodenitis is inflammation, usually less immediately life-threatening than hemorrhage, peritonitis, or obstruction.",
+  "Lying down after small meals slows gastric emptying and reduces dumping syndrome symptoms.",
+  "During fasting, the body first breaks down stored glycogen for glucose.",
+  "Vitamins do not provide calories/energy; they are micronutrients.",
+  "Bacon and egg are high in fat, which relaxes the lower esophageal sphincter and worsens GERD.",
+  "Broiled veggies are low in fat and non-acidic, generally well-tolerated in GERD.",
+  "Gastric analysis directly measures pH, volume, and appearance of gastric contents.",
+  "Validation’s importance excludes the idea that most patients are cognitively impaired.",
+  "The referent (stimulus) initiates the communication process.",
+  "Empathizing shows understanding of feelings without pity, building trust with stressed patients.",
+  "Rapport reduces threat, not generates it; 'generates threat' is the exception.",
+  "Face-to-face assessment involves interpersonal communication between two people.",
+  "Completed IRs must be summarized monthly and stored securely to maintain confidentiality.",
+  "Binding charts as they are without checking order/completeness is incorrect; the exception.",
+  "Medical records staff check completeness of all charting before filing.",
+  "General patient records are typically stored 5–10 years depending on facility policy.",
+  "Medico-legal charts are kept for the patient's lifetime or as required by law.",
+  "Ischemic stroke results from vascular occlusion (clot) reducing blood flow to the brain.",
+  "Hemianopsia means blindness in half of the visual field in one or both eyes.",
+  "Non-contrast CT scan is the initial stroke test to rule out hemorrhage.",
+  "Thrombolytics lyse clots, so major adverse effect is bleeding.",
+  "Placing a pillow in the axilla abducts the shoulder, preventing adduction stiffness.",
+  "The physician must obtain informed consent; nurse should ask doctor to explain further.",
+  "Battery is unlawful touching without consent, even if treatment intended.",
+  "A verbal order does not establish negligence; duty, breach, and harm do.",
+  "Slander is spoken defamation; telling coworkers a false communicable disease is slander.",
+  "Forcing a blood transfusion against religious beliefs is battery (unlawful touching).",
+  "Autonomy respects patient's right to make informed choices about treatment.",
+  "Non-maleficence means 'do no harm'; refusing unqualified tasks prevents harm.",
+  "The Code of Ethics states nurses shall not participate in euthanasia.",
+  "Paternalism is overriding patient's wishes for what the doctor thinks is best.",
+  "Ethical violations in transplantation are referred to the Ethics Committee.",
+  "In-service training is employer-provided to enhance staff competencies.",
+  "Engaging in CPD programs develops professional career.",
+  "Reporting to the concerned agency (e.g., Board of Nursing) is appropriate action.",
+  "Social graces and physical fitness enhance personality and professional presence.",
+  "Requesting more time balances career move with family and education responsibilities.",
+  "Revealing private patient info without consent is invasion of privacy.",
+  "Quality improvement is proactive, not reactive; reacting to correct bad situations is not characteristic.",
+  "Incident reports document risks, but risk management aims to prevent accidents/injuries/financial loss, not reports themselves.",
+  "Tracking complaints at irregular intervals is inconsistent, not preventive.",
+  "Rebuttal point by point escalates conflict; handling complaints requires listening, not arguing.",
+  "Filling every moment with tasks reduces personal time, not creates it (exception).",
+  "Use only hospital-approved abbreviations to ensure clarity and safety.",
+  "Call the physician to clarify illegible orders; never guess.",
+  "Draw a single line, correct above, sign/date; never obscure or erase.",
+  "Record-keeping is mandatory, not optional when circumstances allow.",
+  "Primary purpose of audit is to ensure standards of care are met.",
+  "Acromegaly is caused by excessive growth hormone after epiphyseal closure.",
+  "Enlargement of hands and feet is a classic sign of acromegaly.",
+  "Excess GH from anterior pituitary causes acromegaly.",
+  "Alpha interferon commonly causes flu-like symptoms (fever, myalgia, fatigue).",
+  "Gamma cells are not in the pancreas; pancreatic islets have alpha, beta, delta, and PP cells.",
+  "Apidra (insulin glulisine) is rapid-acting.",
+  "Dawn phenomenon: normal nighttime glucose, then rise in early morning from hormone release.",
+  "Humulin R (regular insulin) is short-acting.",
+  "Lantus/Basaglar (glargine) lasts about 24 hours.",
+  "Rotating sites prevents lipodystrophy (atrophy or hypertrophy of fat).",
+  "Abdomen has fastest and most consistent insulin absorption.",
+  "ADA recommends fasting glucose 80–130 mg/dL for diabetics.",
+  "Washing with both hot and cold water increases injury risk; use lukewarm water.",
+  "Kussmaul respirations (deep, rapid) compensate for metabolic acidosis in DKA.",
+  "Same as #69; dawn phenomenon.",
+  "Lispro (Humalog) is rapid-acting, onset 5–15 minutes.",
+  "Autoimmune beta cell destruction is Type 1, not Type 2.",
+  "Yellow containers in healthcare are for infectious waste (diapers, soiled linen, gloves).",
+  "Black containers are for general non-hazardous office waste.",
+  "Green bins are typically for biodegradable wet waste (food, garden).",
+  "Pearson attachment supports the lower leg in balanced suspension traction.",
+  "In Buck's traction, patient can sit up but cannot turn side to side.",
+  "Knots against pulleys cause friction and inaccurate traction.",
+  "Limiting mobility prevents further retinal detachment.",
+  "Floaters after detachment are from blood cells released into the vitreous.",
+  "Eye patches reduce rapid eye movements that could worsen detachment.",
+  "Miotics constrict pupil (improve outflow) and dilate blood vessels.",
+  "Drops should be instilled into the conjunctival sac in the center of the lower lid.",
+  "Non-contact tonometry is painless and has no side effects.",
+  "Blurred vision and colored halos around lights are classic acute angle-closure glaucoma symptoms.",
+  "Pilocarpine constricts pupil and opens trabecular meshwork to promote aqueous drainage.",
+  "Atropine dilates pupil, worsening angle-closure glaucoma; nurse should question the order.",
+  "High risk for injury is priority due to impaired vision and potential falls.",
+  "Coughing increases intraocular pressure, risking damage after cataract surgery.",
+  "Avoid bending to prevent increased IOP and strain on the surgical site.",
+  "Semi-Fowlers reduces IOP and promotes comfort post-cataract surgery.",
+  "Nausea and severe eye pain after cataract surgery suggest increased IOP or complication; notify provider.",
+  "ACTH is released by the anterior pituitary gland."
+];
+
+// Question texts
+const questionTexts = [
+  "The nurse is aware that pain associated with duodenal ulcer commonly occurs",
+  "The physician asks another question to the nurse about which artery is not included in the gastrointestinal system. The nurse is correct when she answered:",
+  "which nerves are responsible for innervation in the function of the GIT. The nurse is correct when she answered, except:",
+  "In which part of the digestive tract does most of the absorption of digested nutrients into the bloodstream occur?",
+  "Which digestive enzyme is responsible for the breakdown of proteins in the stomach?",
+  "Which of the following is NOT one of the main regions of the stomach?",
+  "The FIRST part of digestive process occurs in the",
+  "Which of the following is NOT part of the small intestine?",
+  "Which organ is responsible for producing bile, which aids in the digestion of fats in the small intestine?",
+  "enzyme in saliva started from mouth to esophagus to stomach that breaks down carbohydrates:",
+  "Which bacteria is often the cause of PEPTIC ulcers",
+  "What food will you advice your patient to be AVOIDED in Duodenal Ulcer?",
+  "When a patient goes for Billroth I gastrectomy procedure, it is very important that patient and family members have to be oriented that this operation involves which of the following?",
+  "A patient with chronic peptic ulcer disease underwent a gastric resection (Billroth I). What condition is this patient most likely to experience?",
+  "What is the least priority among the complications of acute duodenal ulcer:",
+  "A nurse is providing dietary teaching to a client who has dumping syndrome following gastric bypass surgery 4 days ago. What should be included in the teaching??",
+  "A patient is prescribed to be NPO for eight hours. During times of fasting, the body use this as a substitute source of energy.",
+  "What nutrient do not provide calories so they don't provide energy in the diet.",
+  "Food to avoid in GERD includes",
+  "What food can be eaten by a patient with GERD?",
+  "Test to determine gastric pH, appearance and gastric volume",
+  "It is not enough for the nurse to listen, but she also has, to validate what she has heard. The importance of validation are the following EXCEPT",
+  "To be more responsible, a nurse needs to understand the elements of the communication process. When she initiates interpersonal communication, the element involved is",
+  "Should the nurse encounter patients who are stressed due to their health condition, the BEST way to communicate is through which one of the following?",
+  "The reasons for the nurse wishing to enhance his/her communication skill is to be able to establish Rapport, EXCEPT",
+  "When the nurse interacts with patients face-to-face such as in getting information during the assessment phase of the nursing process, the level of communication is which of the following?",
+  "Incident Reports (IRs) shall be collected for the day and due investigations scheduled by the quality Department. Upon completion of the investigation, the IRS ________.",
+  "The patient record (charts) are collected every three nights from the various departments. The night nurse is EXPECTED to do the following, EXCEPT, (-)",
+  "When patient record reach the Medical Records, the assigned staff will _________.",
+  "The charts are stored in the Medical Records or storage room for at least ________ years.",
+  "How many years are medico-legal charts stored?",
+  "Nilda wonders how she developed the manifestation of ischemic stroke. The nurse explains that there is",
+  "The nurse knows that visual-perceptual disturbances can occur in stroke. when patient Nilda manifests hemianopsia, she has",
+  "The nurse knows that initial diagnostic test that is ordered for stroke ________.",
+  "The ER nurse anticipates that a thrombolytic agent would be ordered to treat ischemic attacks. Knowing the action of thrombolytics, the nurse must particularly be alert for which adverse reaction?",
+  "Patient Nilda complains of shoulder pain. The nurse is aware that she is prone to have adduction of the shoulder. A nursing intervention for this is to",
+  "A patient scheduled for a breast biopsy is very anxious and does not seem to understand the ordered surgery, a radical mastectomy. What is the APPROPRIATE action by the nurse?",
+  "A patient refuses an intramuscular injection, but the nurse proceeds to administer it anyway. What can the nurse be accused of?",
+  "A staff nurse performing a prescribed modified steam inhalation on a pediatric patient causes burns. What is NOT a RELEVANT statement to establish negligence?",
+  "Staff nurse A tells co-workers that staff B is suffering from a specific communicable disease. What can staff A be sued for?",
+  "A patient with specific religious beliefs reiterates non-acceptance of a blood transfusion. If a nurse defies this and the patient is transfused, what legal case could be filed by the patient?",
+  "When the nurse ensures that patients have consented to all treatments and procedures, which ethical principle is being upheld?",
+  "If the nurse will refuse to perform duties for which she is not qualified, she is practicing ________.",
+  "The Code of Ethics stipulates that human life is inviolable. Which statement CORRECTLY translates the principle to the situation of the Filipino nurse as a professional?",
+  "When the physician insists that his cancer patient undergoes radiation, in addition to chemotherapy which is CONTRARY to the patient's and family's wishes, the physician is exercising",
+  "An Iranian was admitted to the hospital for kidney transplantation. He claims his donor is a Filipino relative as required by the law. However, it was discovered later that his claim was not true. Should the doctor fail to act accordingly to the wrong information, the nurse is obligated to refer the case to, which of the following?",
+  "As a newly licensed nurse employed in a tertiary hospital, you are required to attend Continuing Professional Development (CPD) program. When the training program is for the enhancement of the competencies of nurses employed in the hospital, it is called ________.",
+  "The professional career development of a nurse can be achieved through various ways, such as ________.",
+  "when nurses are projected in a television advertisement as sex symbols, what APPROPRIATE action is expected from a concerned nurse?",
+  "To enhance the personality of the graduate nurse, she/he may attend which of the following programs?",
+  "The nurse's application to Canada has finally been approved and she was advised to depart in three months. She is currently enrolled in the graduate school. Moreover, her mother has just been discharged from the hospital. Which of the following actions is best?",
+  "Nurses may be privy to very personal information of patients and should make every effort to make it confidential, otherwise she can be charged of ________.",
+  "Which of the following is not a characteristic of quality improvement that the medical director is interested in?",
+  "A risk is any event that causes problems or benefits on the healthcare institution. The Medical Director knows that potential risks must be identified across the hospital in order to prevent the following, EXCEPT",
+  "Based on patient survey, a number of complaints have been tracked. Which of the following is NOT a preventive activity in the practice of the Medical Director’s risk management?",
+  "The Medical Director, with the Chief Nurse and other officers of the hospital believe that Patient Relations is important in risk management because a dissatisfied customer is likely to sue. Which is NOT the way to handle complaints?",
+  "Nurses usually complain they have no personal life because of rotating shifts The following are three major ways to create personal time, EXCEPT",
+  "Nurse Gay is assigned in the Medical Unit. She is guided that in documentation, she should use abbreviation that is ________.",
+  "One error in record-keeping is illegible handwriting. What is the APPROPRIATE action by the nurse in this situation?",
+  "When a nurse commits an error in the progress notes the BEST action he should do is to",
+  "Which is not a correct statement regarding record-keeping?",
+  "The QA nurse conducts a regular audit of the medical records the PRIMARY purpose of conducting audit in a health facility is to ________.",
+  "Acromegaly is caused by excessive secretion of ________.",
+  "Which signs and symptoms would the nurse expect to assess in a patient who is diagnosed with acromegaly?",
+  "Acromegaly results from hyperactivity of what gland?",
+  "A patient is taking alpha interferon for acromegaly. For which side effects should the nurse monitor this patient?",
+  "Which of the following cell types is NOT included in the pancreas?",
+  "What type of insulin is Apidra?",
+  "The nurse is caring for a client who has normal glucose levels at bedtime, until approximately 3 am, when blood glucose levels begin to rise. What is this client likely experiencing?",
+  "Which of the following is a short-acting insulin?",
+  "How many hours is the duration of effect of Lantus (basaglar) insulin?",
+  "The nurse teaches the diabetic client to rotate sites of insulin injection so as to:",
+  "Fastest absorption site for insulin injection in patient with diabetes",
+  "What is the normal fasting blood glucose level for diabetic patients based on the American Diabetes Association?",
+  "Which of the following foot care actions should a patient with diabetes avoid doing?",
+  "A patient diagnosed with diabetic ketoacidosis would be expected to have which type of respiratory pattern?",
+  "The nurse is caring for a client who has normal glucose levels at bedtime, until approximately 3 am, when blood glucose levels begin to rise. What is this client likely experiencing?",
+  "What rapid-acting insulin analog with an onset of action of 5 - 15 Minutes.",
+  "Which of the following is NOT TRUE of type 2 diabetes Mellitus?",
+  "What can be disposed in a yellow container?",
+  "Where can you dispose hospital office wastes?",
+  "Which of the following wastes is for Green trash bin",
+  "A client has a Pearson attachment on the traction setup. Which of the following is the purpose of this attachment?",
+  "The client asks the nurse what his activity limitations are while he is in Buck's traction. The nurse should tell the client:",
+  "What is an appropriate example of proper traction use?",
+  "The client is diagnosed in the emergency department with a detached retina in the right eye. The nurse should do which of the following first?",
+  "As the nurse completes the admission history, the client reports that before the physician patched his eye, he saw many spots or 'floaters.' The nurse should explain to the client that these spots were cause by",
+  "The client asks the nurse why his eyes have to be patched. The nurse reply should be based on the knowledge that eye patches serve to",
+  "The nurse is to instill drops of MIOTIC drug into the client's eye. Which of the following is the expected outcome?",
+  "The nurse is observing a student nurse administer eyedrops, as shown in the figure. What should the nurse instruct the student to do?",
+  "The physician would like to measure the intraocular pressure with non-contact (air puff) tonometer. While preparing patient for her examination, the nurse informs the patient that",
+  "Which symptoms are ASSOCIATED with acute-closed angle glaucoma?",
+  "The physician has prescribed Pilocarpine one percent eye drops every six hours. The expected OUTCOME for this medication is to",
+  "The physician recommends peripheral iridectomy to relieve intraocular pressure. He prescribed Meperidine Hydrochloride (Demerol) 50mg and Atropine Sulfate 0.3mg IM as the preoperative medications. The nurse should ________.",
+  "Which of these nursing diagnoses should the nurse give PRIORITY for an elderly patient who has impaired vision due to glaucoma?",
+  "To decrease intraocular pressure following cataract surgery, the nurse should instruct the client to avoid:",
+  "Mrs. Castro had right eye cataract surgery. What will be the MOST APPROPRIATE nursing care during the first 48 hours?",
+  "Which APPROPRIATE position should the nurse place Mrs. Castro postoperatively?",
+  "A nurse is assessing a client following cataract surgery. The client reports nausea and severe eye pain. Which of the following actions should the nurse take?",
+  "Adrenocorticotropic hormone (ACTH) is a hormone released by?"
+];
+
+// COMPLETE OPTIONS FOR ALL 100 QUESTIONS
 const allOptions = [
   ["2-3 hours after meal","An hour After taking midnight snacks","one hour after taking snacks in the afternoon","immediately after intake of food"],
   ["Iliac Artery","Superior Mesenteric Artery","celiac Artery","Inferior Mesenteric Artery"],
@@ -373,37 +580,16 @@ const allOptions = [
   ["Pituitary","Thyroid","Adrenal","Hypothalamus"]
 ];
 
-const questionTexts = [];
-for (let i = 1; i <= 100; i++) {
-  questionTexts.push(`Question ${i} text`); // Will be populated from the actual questions
-}
-
-// Simplified - let me directly embed the questions from your original list
-const fullQuestions = [
-  "The nurse is aware that pain associated with duodenal ulcer commonly occurs",
-  "The physician asks another question to the nurse about which artery is not included in the gastrointestinal system. The nurse is correct when she answered:",
-  "which nerves are responsible for innervation in the function of the GIT. The nurse is correct when she answered, except:",
-  "In which part of the digestive tract does most of the absorption of digested nutrients into the bloodstream occur?",
-  "Which digestive enzyme is responsible for the breakdown of proteins in the stomach?",
-  "Which of the following is NOT one of the main regions of the stomach?",
-  "The FIRST part of digestive process occurs in the",
-  "Which of the following is NOT part of the small intestine?",
-  "Which organ is responsible for producing bile, which aids in the digestion of fats in the small intestine?",
-  "enzyme in saliva started from mouth to esophagus to stomach that breaks down carbohydrates:"
-];
-
-// Build complete questions array
+// Build the complete QUESTIONS array
 const QUESTIONS = [];
 for (let i = 0; i < 100; i++) {
-  // For simplicity, using generic question text for beyond index 10, but all options are complete
-  let qText = i < fullQuestions.length ? fullQuestions[i] : `Nursing Practice IV Question ${i+1}`;
   QUESTIONS.push({
     id: i,
     qNum: i + 1,
-    text: qText,
+    text: questionTexts[i],
     opts: allOptions[i],
-    ans: answerKeyIndices[i],
-    explanation: "Rationale: Based on standard nursing and medical-surgical nursing practice references."
+    ans: answerKey[i],
+    explanation: explanations[i]
   });
 }
 
@@ -458,7 +644,6 @@ function selectOption(qIdx, optIdx) {
   if (isCorrect) correctCount++;
   else { wrongCount++; wrongList.push({ qIdx, chosen: optIdx }); }
   
-  // Apply highlights: GREEN for correct answer, RED for user's wrong answer
   for (let i = 0; i < btns.length; i++) {
     if (i === q.ans) {
       btns[i].classList.add('correct-highlight');
@@ -471,9 +656,7 @@ function selectOption(qIdx, optIdx) {
   
   fbDiv.classList.add('show');
   fbDiv.classList.add(isCorrect ? 'correct-fb' : 'wrong-fb');
-  const correctLetter = String.fromCharCode(65 + q.ans);
-  const correctText = q.opts[q.ans];
-  fbDiv.innerHTML = `<div class="fb-header"><span>${isCorrect ? '✓ Correct!' : '✗ Incorrect'}</span></div><div class="explanation-text">📖 <strong>Explanation:</strong> The correct answer is ${correctLetter}. ${escapeHtml(correctText)}. ${escapeHtml(q.explanation)}</div>`;
+  fbDiv.innerHTML = `<div class="fb-header"><span>${isCorrect ? '✓ Correct!' : '✗ Incorrect'}</span></div><div class="explanation-text">📖 <strong>Explanation:</strong> ${escapeHtml(q.explanation)}</div>`;
   
   updateStats();
   if (answeredCount === 100) showFinalBanner();
@@ -537,9 +720,7 @@ function closeReviewModal() {
   document.body.style.overflow = '';
 }
 
-function restartQuiz() {
-  location.reload();
-}
+function restartQuiz() { location.reload(); }
 
 window.onload = () => {
   renderQuiz();
